@@ -11,9 +11,34 @@ epsilon = 0.85
 epsilonDecay = 0.01
 random.seed(1)
 
-actions = ["r", "l", "u", "d"]
+#breeding and killing parameters
+breedChance = 0.3
+killChance = 0.3
+lastMapName = ""
+lastMapAgent = ""
+lastMapAgentStillAlive = False
 
+actions = ["r", "l", "u", "d"]
 agents = ["Sally", "Brandon", "Peach", "Dawn", "Don"]
+
+def ChildNameGeneration(parent1, parent2):
+	parent1NameContribution = parent1[:min(random.randint(0, len(parent1)),1)]
+	parent2NameContribution = parent2[random.randint(0, len(parent2)-1):]
+	return parent1NameContribution+parent2NameContribution
+
+def ChildQTable(qTable1, qTable2):
+	childQTable = {}
+	for key in qTable1.keys():
+		if key in qTable2.keys():
+			childQTable[key] = random.choice([qTable1[key], qTable2[key]])
+		else:
+			childQTable[key] = qTable1[key]
+
+	for key in qTable2.keys():
+		if not key in qTable1.keys():
+			childQTable[key] = qTable2[key]
+	return childQTable
+
 qTables = {}
 for a in agents:
 	if os.path.exists("./"+a+"qTable.pickle"):
@@ -26,6 +51,7 @@ while True:
 	print (" ")
 	envs = GrabEnvironments()
 	currEnv = random.choice(envs)
+	
 	currAgent = random.choice(agents)
 	qTable = qTables[currAgent]
 
@@ -118,7 +144,28 @@ while True:
 	qTables[currAgent] = qTable
 
 	#print ("Q table sum: "+ ("%0.2f" %qTableSum))
-	print ("--- Total Reward: "+str(totalReward)+". Total Lifetime: "+str(rolloutIndex)+"% ---")
+	print ("--- Dagochi "+currAgent+" managed to collect "+str(totalReward)+" reward! They stayed alive for "+str(rolloutIndex)+"% ---")
+
+	#Breeding and Killing Stuff
+
+	if lastMapName==currEnv.mapName:
+		if not lastMapAgent==currAgent:
+			if random.random() <= breedChance:
+				#Breed
+				childName = ChildNameGeneration(currAgent,lastMapAgent)
+				childQTable = ChildQTable(qTables[currAgent], qTables[lastMapAgent])
+				agents.append(childName)
+				qTables[childName] = childQTable
+				print ("--- Congratulations to "+currAgent+" and "+lastMapAgent+" for the birth of their child "+childName+"! ---")
+
+			if random.random() <= killChance:
+				#Kill 
+				agents.remove(lastMapAgent)
+				print ("--- Oh no! "+currAgent+" just killed "+lastMapAgent+"! They will be missed. ---")
+
+
+
+	#Mood Stuff
 
 	mood = qTableSum
 	depressed = False
@@ -146,6 +193,9 @@ while True:
 		
 
 	pickle.dump(qTable,open(currAgent+"qTable.pickle", "wb"))
+	lastMapName = ""+currEnv.mapName
+	lastMapAgent = ""+currAgent
+	lastMapAgentStillAlive = len(currEnv.playerPos)>0
 
 
 
