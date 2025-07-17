@@ -108,10 +108,13 @@ while True:
 
 	print ("--- Total Reward: "+str(totalReward)+". Total Lifetime: "+str(rolloutIndex)+"% ---")
 
-	if totalReward<0:
+	if totalReward<-100:
 		print ("Dagochi: ε(´סּ︵סּ`)з")
 		print ("Dagochi: Oh I didn't do very well, but I'll get better!")
-	if totalReward>0:
+	if totalReward<=100 and totalReward>=-100:
+		print ("Dagochi: ¯\\(°_o)/¯")
+		print ("Dagochi: Well, at least I'm not dead!")
+	if totalReward>100:
 		print ("Dagochi: ᕕ( ᐛ )ᕗ")
 		print ("Dagochi: Oh wow I did great!")
 		
