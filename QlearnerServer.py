@@ -154,6 +154,12 @@ while True:
 			if random.random() <= breedChance:
 				#Breed
 				childName = ChildNameGeneration(currAgent,lastMapAgent)
+
+				if childName==currAgent or childName==lastMapAgent:
+					childName+= " Junior"
+				else:
+					if childName in ChildQTable.keys():
+						childName+="a"
 				childQTable = ChildQTable(qTables[currAgent], qTables[lastMapAgent])
 				agents.append(childName)
 				qTables[childName] = childQTable
