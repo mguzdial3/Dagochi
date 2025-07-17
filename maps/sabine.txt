@@ -1,0 +1,6 @@
+CCCCCCCCCC
+C--------C
+C----A---C
+C--------C
+C--F-----C
+CCCCCCCCCC
