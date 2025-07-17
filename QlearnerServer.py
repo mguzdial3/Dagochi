@@ -22,7 +22,7 @@ actions = ["r", "l", "u", "d"]
 agents = ["Sally", "Brandon", "Peach", "Dawn", "Don"]
 
 def ChildNameGeneration(parent1, parent2):
-	parent1NameContribution = parent1[:min(random.randint(0, len(parent1)),1)]
+	parent1NameContribution = parent1[:random.randint(1, len(parent1)-1)]
 	parent2NameContribution = parent2[random.randint(0, len(parent2)-1):]
 	return parent1NameContribution+parent2NameContribution
 
