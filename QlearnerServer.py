@@ -88,8 +88,8 @@ while True:
 
 	# Q-update
 	for j in range(len(SARs)-1, 0, -1):
-		oldQValue = 0#assume 0 initialization
-		optimalFutureValue = -10
+		oldQValue = random.randrange(-100,100)#assume 0 initialization
+		optimalFutureValue = oldQValue
 
 		if SARs[j][0] in qTable.keys():
 			if SARs[j][1] in qTable[SARs[j][0]].keys():
@@ -101,7 +101,7 @@ while True:
 						if optimalFutureValue < qTable[SARs[j+1][0]][a]:
 							optimalFutureValue = qTable[SARs[j+1][0]][a]
 			else:
-				optimalFutureValue = 0
+				optimalFutureValue = oldQValue
 
 		newQValue = oldQValue + learningRate*(SARs[j][2] + discountFactor*optimalFutureValue - oldQValue)
 
@@ -130,10 +130,10 @@ while True:
 		if totalReward<-100:
 			print ("Dagochi "+currAgent+": ε(´סּ︵סּ`)з")
 			print ("Dagochi "+currAgent+": Oh I didn't do very well, but I'll get better!")
-		if totalReward<=100 and totalReward>=-100:
+		if totalReward<=0 and totalReward>=-100:
 			print ("Dagochi "+currAgent+": ¯\\(°_o)/¯")
 			print ("Dagochi "+currAgent+": Well, at least I'm not dead!")
-		if totalReward>100:
+		if totalReward>0:
 			print ("Dagochi "+currAgent+": ᕕ( ᐛ )ᕗ")
 			print ("Dagochi "+currAgent+": Oh wow I did great!")
 	else:
