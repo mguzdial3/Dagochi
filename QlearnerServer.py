@@ -158,7 +158,7 @@ while True:
 				if childName==currAgent or childName==lastMapAgent:
 					childName+= " Junior"
 				else:
-					if childName in ChildQTable.keys():
+					if childName in qTables.keys():
 						childName+="a"
 				childQTable = ChildQTable(qTables[currAgent], qTables[lastMapAgent])
 				agents.append(childName)
