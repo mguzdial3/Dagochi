@@ -21,6 +21,9 @@ lastMapAgentStillAlive = False
 actions = ["r", "l", "u", "d"]
 agents = ["Sally", "Brandon", "Peach", "Dawn", "Don"]
 
+newAgents = []
+deadAgents = []
+
 def ChildNameGeneration(parent1, parent2):
 	parent1NameContribution = parent1[:random.randint(1, len(parent1)-1)]
 	parent2NameContribution = parent2[random.randint(0, len(parent2)-1):]
@@ -48,13 +51,16 @@ for a in agents:
 
 while True:
 	time.sleep(3)
-	print (" ")
+	
 	envs = GrabEnvironments()
 	currEnv = random.choice(envs)
 	
 	currAgent = random.choice(agents)
 	qTable = qTables[currAgent]
+	print (" ")
+	print ("--- Population: "+str(len(agents))+" Births: "+str(len(newAgents)) + " Deaths: "+str(len(deadAgents)))
 
+	print (" ")
 	print ("Dagochi "+currAgent+": playing "+str(currEnv.mapName)+"!")
 	SARs = []
 	rolloutComplete = False
@@ -144,7 +150,7 @@ while True:
 	qTables[currAgent] = qTable
 
 	#print ("Q table sum: "+ ("%0.2f" %qTableSum))
-	print ("--- Dagochi "+currAgent+" managed to collect "+str(totalReward)+" reward! They reached "+str(rolloutIndex)+"%"+" of their step goals! ---")
+	print ("--- Dagochi "+currAgent+" managed to collect "+str(totalReward)+" reward! They reached "+str(rolloutIndex)+"%"+" of their step goals!")
 
 
 	#Breeding and Killing Stuff
@@ -163,12 +169,14 @@ while True:
 				childQTable = ChildQTable(qTables[currAgent], qTables[lastMapAgent])
 				agents.append(childName)
 				qTables[childName] = childQTable
-				print ("--- Congratulations to "+currAgent+" and "+lastMapAgent+" for the birth of their child "+childName+"! ---")
+				print ("--- Congratulations to "+currAgent+" and "+lastMapAgent+" for the birth of their child "+childName+"!")
+				newAgents.append(childName)
 
 			if random.random() <= killChance:
 				#Kill 
 				agents.remove(lastMapAgent)
-				print ("--- Oh no! "+currAgent+" just killed "+lastMapAgent+"! They will be missed. ---")
+				print ("--- Oh no! "+currAgent+" just killed "+lastMapAgent+"! They will be missed.")
+				deadAgents.append(lastMapAgent)
 
 
 
