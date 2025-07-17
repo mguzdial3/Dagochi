@@ -103,20 +103,39 @@ while True:
 		qTable[SARs[j][0]][SARs[j][1]] = newQValue
 
 
-	#qTableSum = 0
-	#for 
+	qTableSum = 0
+	for keys in qTable.keys():
+		for keys2 in qTable[keys].keys():
+			qTableSum += qTable[keys][keys2]
 
+
+	#print ("Q table sum: "+ ("%0.2f" %qTableSum))
 	print ("--- Total Reward: "+str(totalReward)+". Total Lifetime: "+str(rolloutIndex)+"% ---")
 
-	if totalReward<-100:
-		print ("Dagochi: ε(´סּ︵סּ`)з")
-		print ("Dagochi: Oh I didn't do very well, but I'll get better!")
-	if totalReward<=100 and totalReward>=-100:
-		print ("Dagochi: ¯\\(°_o)/¯")
-		print ("Dagochi: Well, at least I'm not dead!")
-	if totalReward>100:
-		print ("Dagochi: ᕕ( ᐛ )ᕗ")
-		print ("Dagochi: Oh wow I did great!")
+	mood = qTableSum
+
+	depressed = False
+
+	if mood < -500:
+		depressed = True
+
+	if not depressed:
+		if totalReward<-100:
+			print ("Dagochi: ε(´סּ︵סּ`)з")
+			print ("Dagochi: Oh I didn't do very well, but I'll get better!")
+		if totalReward<=100 and totalReward>=-100:
+			print ("Dagochi: ¯\\(°_o)/¯")
+			print ("Dagochi: Well, at least I'm not dead!")
+		if totalReward>100:
+			print ("Dagochi: ᕕ( ᐛ )ᕗ")
+			print ("Dagochi: Oh wow I did great!")
+	else:
+		if totalReward<0: 
+			print ("Dagochi: (︶︹︶)")
+			print ("Dagochi: Of course it went badly.")
+		if totalReward>=0:
+			print ("Dagochi: (ﾉ◕ヮ◕)ﾉ")
+			print ("Dagochi: Whoa! That was fun!")
 		
 
 	pickle.dump(qTable,open("qTable.pickle", "wb"))
