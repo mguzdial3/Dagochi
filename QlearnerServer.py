@@ -144,7 +144,8 @@ while True:
 	qTables[currAgent] = qTable
 
 	#print ("Q table sum: "+ ("%0.2f" %qTableSum))
-	print ("--- Dagochi "+currAgent+" managed to collect "+str(totalReward)+" reward! They stayed alive for "+str(rolloutIndex)+"% ---")
+	print ("--- Dagochi "+currAgent+" managed to collect "+str(totalReward)+" reward! They reached "+str(rolloutIndex)+"%"+" of their step goals! ---")
+
 
 	#Breeding and Killing Stuff
 
