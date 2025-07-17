@@ -12,17 +12,24 @@ epsilonDecay = 0.01
 random.seed(1)
 
 actions = ["r", "l", "u", "d"]
-qTable = {}#state->actions->values
 
-if os.path.exists("./qTable.pickle"):
-	currEngine = pickle.load(open("qTable.pickle", "rb"))
+agents = ["Sally", "Brandon", "Peach", "Dawn", "Don"]
+qTables = {}
+for a in agents:
+	if os.path.exists("./"+a+"qTable.pickle"):
+		qTables[a] = pickle.load(open("./"+a+"qTable.pickle", "rb"))
+	else:
+		qTables[a] = {}
 
 while True:
 	time.sleep(3)
 	print (" ")
 	envs = GrabEnvironments()
 	currEnv = random.choice(envs)
-	print ("Dagochi: playing "+str(currEnv.mapName)+"!")
+	currAgent = random.choice(agents)
+	qTable = qTables[currAgent]
+
+	print ("Dagochi "+currAgent+": playing "+str(currEnv.mapName)+"!")
 	SARs = []
 	rolloutComplete = False
 	rolloutIndex = 0
@@ -108,12 +115,12 @@ while True:
 		for keys2 in qTable[keys].keys():
 			qTableSum += qTable[keys][keys2]
 
+	qTables[currAgent] = qTable
 
 	#print ("Q table sum: "+ ("%0.2f" %qTableSum))
 	print ("--- Total Reward: "+str(totalReward)+". Total Lifetime: "+str(rolloutIndex)+"% ---")
 
 	mood = qTableSum
-
 	depressed = False
 
 	if mood < -500:
@@ -121,24 +128,24 @@ while True:
 
 	if not depressed:
 		if totalReward<-100:
-			print ("Dagochi: ε(´סּ︵סּ`)з")
-			print ("Dagochi: Oh I didn't do very well, but I'll get better!")
+			print ("Dagochi "+currAgent+": ε(´סּ︵סּ`)з")
+			print ("Dagochi "+currAgent+": Oh I didn't do very well, but I'll get better!")
 		if totalReward<=100 and totalReward>=-100:
-			print ("Dagochi: ¯\\(°_o)/¯")
-			print ("Dagochi: Well, at least I'm not dead!")
+			print ("Dagochi "+currAgent+": ¯\\(°_o)/¯")
+			print ("Dagochi "+currAgent+": Well, at least I'm not dead!")
 		if totalReward>100:
-			print ("Dagochi: ᕕ( ᐛ )ᕗ")
-			print ("Dagochi: Oh wow I did great!")
+			print ("Dagochi "+currAgent+": ᕕ( ᐛ )ᕗ")
+			print ("Dagochi "+currAgent+": Oh wow I did great!")
 	else:
 		if totalReward<0: 
-			print ("Dagochi: (︶︹︶)")
-			print ("Dagochi: Of course it went badly.")
+			print ("Dagochi "+currAgent+": (︶︹︶)")
+			print ("Dagochi "+currAgent+": Of course it went badly.")
 		if totalReward>=0:
-			print ("Dagochi: (ﾉ◕ヮ◕)ﾉ")
-			print ("Dagochi: Whoa! That was fun!")
+			print ("Dagochi "+currAgent+": (ﾉ◕ヮ◕)ﾉ")
+			print ("Dagochi "+currAgent+": Whoa! That was fun!")
 		
 
-	pickle.dump(qTable,open("qTable.pickle", "wb"))
+	pickle.dump(qTable,open(currAgent+"qTable.pickle", "wb"))
 
 
 
